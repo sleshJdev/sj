@@ -1,0 +1,104 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ContactsActivity">
+
+    <RelativeLayout
+        android:id="@+id/header_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="-15dp"
+        android:background="@drawable/header_background"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp">
+
+        <LinearLayout
+            android:id="@+id/lhapp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="4dp"
+                android:contentDescription="@string/logo"
+                android:src="@drawable/mini_logo" />
+
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:shadowColor="@color/stroke_text"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="4"
+                android:text="@string/app_name_short"
+                android:textAllCaps="true"
+                android:textColor="@color/text_white"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/button_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dp"
+            android:gravity="center_vertical"
+            android:paddingTop="3dp"
+            android:src="@drawable/ic_fa_bars" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/button_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header_app"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@drawable/selector_add_button"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="@string/button_aok_contact"
+        android:textAllCaps="true"
+        android:textColor="@color/text_white"
+        android:textSize="22sp"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/plain_contact_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_ok"></ListView>
+
+    <LinearLayout
+        android:id="@+id/InnerRelativeLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <EditText
+            android:id="@+id/edit_text_contact_list_search"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/add_contact_gradient_1"
+            android:padding="5dp"
+            android:text="Поиск..."
+            android:textColor="@color/text_white"
+            android:textSize="24dp"
+            android:textStyle="italic"></EditText>
+
+    </LinearLayout>
+
+</RelativeLayout>
