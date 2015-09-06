@@ -20,6 +20,10 @@ public class SjPreferences {
 
         private String defaultValue;
 
+        public String getDefault(){
+            return defaultValue;
+        }
+
         Key(String defaultValue) {
             this.defaultValue = defaultValue;
         }

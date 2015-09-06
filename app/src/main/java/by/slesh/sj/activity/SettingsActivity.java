@@ -49,12 +49,21 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         int id = PERIODS.get(SjPreferences.get(SjPreferences.Key.HISTORY_CLEANING_FREQUENCY));
         ((RadioButton) dialog.findViewById(id)).setChecked(true);
         builder.setView(dialog);
-        AlertDialog alertDialog = builder.create();
+        final AlertDialog alertDialog = builder.create();
         alertDialog.show();
         ((RadioGroup) dialog.findViewById(R.id.period_options)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                
+                if (PERIODS.values().contains(checkedId)) {
+                    for (String key : PERIODS.keySet()) {
+                        if (PERIODS.get(key) == checkedId) {
+                            SjPreferences.set(SjPreferences.Key.HISTORY_CLEANING_FREQUENCY, PERIODS.get(PERIODS.get(key)).toString());
+                            return;
+                        }
+                    }
+                }
+                SjPreferences.set(SjPreferences.Key.HISTORY_CLEANING_FREQUENCY, SjPreferences.Key.HISTORY_CLEANING_FREQUENCY.getDefault());
+
             }
         });
 

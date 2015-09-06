@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import by.slesh.sj.adapter.buider.SjContactAdapterBuilder;
 import by.slesh.sj.database.core.Database;
-import by.slesh.sj.database.local.SjPreferences;
 import by.slesh.sj.device.CallListener;
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -25,7 +24,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
         Database.initialize(this);//1!!!
-        SjPreferences.initialize();//2!!!
+//        SjPreferences.initialize();//2!!!
 
 //        this.deleteDatabase(DatabaseConnector.DATABASE_NAME);
 
