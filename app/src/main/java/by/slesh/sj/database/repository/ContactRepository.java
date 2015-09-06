@@ -1,11 +1,11 @@
 package by.slesh.sj.database.repository;
 
+import android.database.Cursor;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import by.slesh.sj.database.core.Database;
 import by.slesh.sj.database.model.Contact;
 import by.slesh.sj.database.repository.core.Repository;
 import by.slesh.sj.device.ContactLoader;
@@ -13,72 +13,69 @@ import by.slesh.sj.device.ContactLoader;
 /**
  * Created by slesh on 05.09.2015.
  */
-public class ContactRepository extends Repository {
-    private ContactLoader mContactLoader;
-
-    public ContactRepository(Database connector) {
-        super(connector);
-
-        mContactLoader = new ContactLoader(getContext());
-    }
+public class ContactRepository extends Repository<Contact, Integer> {
+    private ContactLoader mContactLoader = new ContactLoader();
+    private SmsRepository smsRepository = new SmsRepository();
+    private CallRepository callRepository = new CallRepository();
 
     @Override
-    public Integer deleteAll() {
-        return super.delete(Contact.TABLE_NAME, null, null);
-    }
-
-    private static final String DELETE_CONTACT_WHERE_CLAUSE =
-            Contact._ID + " = ?";
-
-    public Integer delete(Contact contact) {
-        String[] arguments = new String[]{Integer.toString(contact.getId())};
-
-        return super.delete(Contact.TABLE_NAME, DELETE_CONTACT_WHERE_CLAUSE, arguments);
-    }
-
-    public List<Contact> getAll() {
+    public List<Contact> findAll() {
         List<Contact> contacts = new ArrayList<>();
         try {
-            connection = openConnection();
-            cursor = connection.query(Contact.TABLE_NAME, null, null, null, null, null, null);
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                Integer id = cursor.getInt(cursor.getColumnIndex(Contact._ID));
-                contacts.add(mContactLoader.getByIp(id));
-                cursor.moveToNext();
+            for (Contact contact : super.findAll()) {
+                contacts.add(mContactLoader.findOne(contact.getId()));
+                contact.setQuantityCalls(callRepository.count(contact));
+                contact.setQuantitySms(smsRepository.count(contact));
             }
         } catch (Exception e) {
-
             Log.e(TAG, "error during fetch contacts", e);
-
-        } finally {
-            close();
         }
 
         return contacts;
     }
 
-    private static final String FIND_CONTACT_BY_PHONE_WHERE_CLAUSE =
-            Contact.PHONE_FIELD + " like %?%";
+    @Override
+    public Integer delete(Contact contact) {
+        smsRepository.deleteForContact(contact);
+        callRepository.deleteForContact(contact);
+
+        return super.delete(contact);
+    }
 
     public Contact findByPhone(String phone) {
         try {
             String[] arguments = new String[]{phone};
-            String[] columns = new String[]{Contact._ID};
+            String[] columns = new String[]{getIdName()};
             connection = openConnection();
-            cursor = connection.query(Contact.TABLE_NAME, columns, FIND_CONTACT_BY_PHONE_WHERE_CLAUSE, arguments, null, null, null);
+            cursor = connection.query(Contact.TABLE_NAME, columns, Contact.PHONE_FIELD + " like %?%", arguments, null, null, null);
             cursor.moveToFirst();
             if (!cursor.isAfterLast()) {
-                return mContactLoader.getByIp(cursor.getInt(cursor.getColumnIndex(Contact._ID)));
+                return mContactLoader.findOne(cursor.getInt(cursor.getColumnIndex(getIdName())));
             }
         } catch (Exception e) {
-
             Log.e(TAG, "error during search contact by phone " + phone, e);
-
         } finally {
             close();
         }
-
         return null;
+    }
+
+    @Override
+    public String getTableName() {
+        return Contact.TABLE_NAME;
+    }
+
+    @Override
+    public String getIdName() {
+        return Contact._ID;
+    }
+
+    @Override
+    protected Contact readModel(Cursor cursor) {
+        Contact contact = new Contact();
+        contact.setId(cursor.getInt(cursor.getColumnIndex(getIdName())));
+        contact.setPhone(cursor.getString(cursor.getColumnIndex(Contact.PHONE_FIELD)));
+
+        return contact;
     }
 }

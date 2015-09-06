@@ -1,35 +1,45 @@
 package by.slesh.sj.database.repository;
 
-import by.slesh.sj.database.core.Database;
+import android.database.Cursor;
+
 import by.slesh.sj.database.model.Contact;
 import by.slesh.sj.database.model.Sms;
-import by.slesh.sj.database.repository.core.SpecificRepository;
+import by.slesh.sj.database.repository.core.Repository;
 
 /**
  * Created by slesh on 05.09.2015.
  */
-public class SmsRepository extends SpecificRepository {
+public class SmsRepository extends Repository<Sms, Integer> {
     private static final String TAG = SmsRepository.class.getCanonicalName();
 
-    public SmsRepository(Database connector) {
-        super(connector);
+    public Integer deleteForContact(Contact contact) {
+        return super.delete(Sms.SENDER_ID_FIELD + " = ?", new String[]{contact.getId().toString()});
     }
 
-    private static final String DELETE_FOR_CONTACT_WHERE_CLAUSE =
-            Sms.SENDER_ID_FIELD + " = ? ";
+    public Integer count(Contact contact) {
+        String where = Sms.SENDER_ID_FIELD + " = ?";
+        String[] arguments = new String[]{contact.getId().toString()};
 
-    public Integer deleteForContact(Contact contact) {
-        String[] arguments = new String[]{Integer.toString(contact.getId())};
-
-        return super.delete(Sms.TABLE_NAME, DELETE_FOR_CONTACT_WHERE_CLAUSE, arguments);
+        return super.count(where, arguments);
     }
 
     @Override
-    public Integer deleteAll() {
-        return super.delete(Sms.TABLE_NAME, null, null);
+    public String getTableName() {
+        return Sms.TABLE_NAME;
     }
 
-    public Integer countSmsForContact(Contact contact) {
-        return super.count(Sms.TABLE_NAME, Sms.SENDER_ID_FIELD, Integer.toString(contact.getId()));
+    @Override
+    public String getIdName() {
+        return Sms._ID;
+    }
+
+    @Override
+    protected Sms readModel(Cursor cursor) {
+        Sms sms = new Sms();
+        sms.setId(cursor.getInt(cursor.getColumnIndex(getIdName())));
+        sms.setDate(cursor.getInt(cursor.getColumnIndex(Sms.DATE_FIELD)));
+        sms.setSenderId(cursor.getInt(cursor.getColumnIndex(Sms.SENDER_ID_FIELD)));
+
+        return sms;
     }
 }

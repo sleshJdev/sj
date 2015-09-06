@@ -8,9 +8,7 @@ import android.widget.SimpleAdapter;
 
 import by.slesh.sj.activity.R;
 import by.slesh.sj.database.model.Contact;
-import by.slesh.sj.database.repository.CallRepository;
 import by.slesh.sj.database.repository.ContactRepository;
-import by.slesh.sj.database.repository.SmsRepository;
 
 /**
  * Created by slesh on 05.09.2015.
@@ -18,15 +16,7 @@ import by.slesh.sj.database.repository.SmsRepository;
 public class SjContactBinder implements SimpleAdapter.ViewBinder {
     private static final String TAG = SjContactBinder.class.getCanonicalName();
 
-    private ContactRepository contactRepository;
-    private CallRepository callRepository;
-    private SmsRepository smsRepository;
-
-    public SjContactBinder(ContactRepository contactRepository, CallRepository callRepository, SmsRepository smsRepository) {
-        this.contactRepository = contactRepository;
-        this.callRepository = callRepository;
-        this.smsRepository = smsRepository;
-    }
+    private ContactRepository contactRepository = new ContactRepository();
 
     @Override
     public boolean setViewValue(View view, final Object data, String textRepresentation) {
@@ -44,8 +34,6 @@ public class SjContactBinder implements SimpleAdapter.ViewBinder {
                     @Override
                     public void onClick(View v) {
                         Contact contact = (Contact) data;
-                        Log.d(TAG, "sms: " + smsRepository.deleteForContact(contact));
-                        Log.d(TAG, "calls: " + callRepository.deleteForContact(contact));
                         Log.d(TAG, "con: " + contactRepository.delete(contact));
 
                         Log.d(TAG, "delete sj-contact with id " + data);

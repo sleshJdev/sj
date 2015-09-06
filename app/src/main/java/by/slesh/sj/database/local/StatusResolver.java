@@ -1,4 +1,4 @@
-package by.slesh.sj.adapter.util;
+package by.slesh.sj.database.local;
 
 import java.util.Random;
 

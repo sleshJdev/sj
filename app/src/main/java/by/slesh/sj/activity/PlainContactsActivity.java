@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import by.slesh.sj.adapter.PlainContactAdapterBuilder;
-import by.slesh.sj.database.core.Database;
+import by.slesh.sj.adapter.buider.PlainContactAdapterBuilder;
 import by.slesh.sj.database.model.Contact;
 import by.slesh.sj.database.repository.ContactRepository;
 
@@ -25,7 +24,6 @@ public class PlainContactsActivity extends Activity implements AdapterView.OnIte
     private static final String TAG = PlainContactsActivity.class.getCanonicalName();
 
     private TextView okButton;
-
     private ContactRepository contactRepository;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +32,13 @@ public class PlainContactsActivity extends Activity implements AdapterView.OnIte
 
         Log.d(TAG, "create activity");
 
-        contactRepository = new ContactRepository(new Database(this));
+        contactRepository = new ContactRepository();
 
         okButton = (TextView) findViewById(R.id.button_ok);
         okButton.setOnClickListener(this);
 
         ListView list = (ListView) findViewById(R.id.plain_contact_list);
-        list.setAdapter(PlainContactAdapterBuilder.build(this));
+        list.setAdapter(PlainContactAdapterBuilder.build());
         list.setOnItemClickListener(this);
 
     }

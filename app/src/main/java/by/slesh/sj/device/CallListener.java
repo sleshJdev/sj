@@ -5,7 +5,6 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import by.slesh.sj.database.core.Database;
 import by.slesh.sj.database.model.Contact;
 import by.slesh.sj.database.model.Sms;
 import by.slesh.sj.database.repository.CallRepository;
@@ -26,10 +25,7 @@ public class CallListener extends PhoneStateListener {
 
     public CallListener(Context context) {
         this.context = context;
-        Database database = new Database(context);
-        contactRepository = new ContactRepository(database);
-        smsRepository = new SmsRepository(database);
-        callRepository = new CallRepository(database);
+        contactRepository = new ContactRepository();
     }
 
     @Override

@@ -2,10 +2,12 @@ package by.slesh.sj.database.model;
 
 import android.content.ContentValues;
 
+import by.slesh.sj.database.model.core.Model;
+
 /**
  * Created by yauheni.putsykovich on 05.09.2015.
  */
-public class Sms implements Model{
+public class Sms extends Model {
     public static final String TABLE_NAME = "sms";
     public static final String DATE_FIELD = "date";
     public static final String SENDER_ID_FIELD = "sender_id";

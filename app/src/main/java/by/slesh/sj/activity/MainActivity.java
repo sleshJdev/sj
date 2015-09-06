@@ -11,43 +11,33 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import by.slesh.sj.adapter.SjContactAdapter;
+import by.slesh.sj.adapter.buider.SjContactAdapterBuilder;
 import by.slesh.sj.database.core.Database;
-import by.slesh.sj.database.repository.CallRepository;
-import by.slesh.sj.database.repository.ContactRepository;
-import by.slesh.sj.database.repository.SmsRepository;
+import by.slesh.sj.database.local.SjPreferences;
 import by.slesh.sj.device.CallListener;
 
 public class MainActivity extends Activity implements View.OnClickListener {
     public static final String TAG = MainActivity.class.getCanonicalName();
-
-    private ContactRepository contactRepository;
-    private SmsRepository smsRepository;
-    private CallRepository callRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d(TAG, "create activity");
+        Database.initialize(this);//1!!!
+        SjPreferences.initialize();//2!!!
 
 //        this.deleteDatabase(DatabaseConnector.DATABASE_NAME);
+
+        Log.d(TAG, "create activity");
 
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         telephonyManager.listen(new CallListener(this), PhoneStateListener.LISTEN_CALL_STATE);
 
         ((TextView) findViewById(R.id.button_add)).setOnClickListener(this);
 
-        Database.initialize(this);
-
-        Database database = Database.getInstance();
-        contactRepository = new ContactRepository(database);
-        smsRepository = new SmsRepository(database);
-        callRepository = new CallRepository(database);
-
         ListView list = (ListView) findViewById(R.id.selected_contact_list_view);
-        list.setAdapter(SjContactAdapter.build(this));
+        list.setAdapter(SjContactAdapterBuilder.build());
     }
 
     @Override

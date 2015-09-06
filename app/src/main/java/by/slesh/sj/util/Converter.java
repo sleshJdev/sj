@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import java.util.HashMap;
 import java.util.Map;
 
-import by.slesh.sj.adapter.util.StatusResolver;
+import by.slesh.sj.database.local.StatusResolver;
 import by.slesh.sj.database.model.Contact;
 
 /**

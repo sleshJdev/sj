@@ -2,6 +2,8 @@ package by.slesh.sj.database.model;
 
 import android.content.ContentValues;
 
+import by.slesh.sj.database.model.core.Model;
+
 /**
  * Created by slesh on 05.09.2015.
  */
