@@ -31,7 +31,7 @@ public abstract class UpdatableActivity extends Activity {
                 long lastUpdateTime = Integer.valueOf(SjPreferences.get(getApplicationContext(), SjPreferences.Key.LAST_UPDATE_TIME));
                 long nowTime = DateUtil.getUnixTime();
                 //TODO: remove
-                period = 10;//for test
+                period = 30;//for test
                 if (nowTime > lastUpdateTime + period) {
                     if (action != null) {
                         action.perform(null);

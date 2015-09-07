@@ -115,7 +115,6 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         ((RadioGroup) dialog.findViewById(R.id.period_options)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Log.d(TAG, "view id: " + checkedId);
                 if (PERIODS.containsKey(checkedId)) {
                     Period period = PERIODS.get(checkedId);
                     SjPreferences.set(getApplicationContext(), changeableProperty, period.getValue());
@@ -131,13 +130,13 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
 
     private void setIsShowCalls(Boolean state) {
         SjPreferences.set(getApplicationContext(), SjPreferences.Key.IS_SHOW_CALLS_IN_LIST, state.toString());
-        Toast.makeText(getApplicationContext(), "Теперь вызовы " + (state ? "будут" : "не будут") + " показывться", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Теперь вызовы " + (state ? "будут" : "не будут") + " показываться", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Изменены настройки. Показывать звонки в спике: " + state);
     }
 
     private void setIsShowSms(Boolean state) {
-        SjPreferences.set(getApplicationContext(), SjPreferences.Key.IS_SHOW_CALLS_IN_LIST, state.toString());
-        Toast.makeText(getApplicationContext(), "Теперь смс " + (state ? "будут" : "не будут") + " показывться", Toast.LENGTH_SHORT).show();
+        SjPreferences.set(getApplicationContext(), SjPreferences.Key.IS_SHOW_SMS_IN_LIST, state.toString());
+        Toast.makeText(getApplicationContext(), "Теперь смс " + (state ? "будут" : "не будут") + " показываться", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Изменены настройки. Показывать смс в спике: " + state);
 
     }
