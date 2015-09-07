@@ -3,6 +3,9 @@ package by.slesh.sj.database.model;
 import android.content.ContentValues;
 import android.provider.BaseColumns;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by slesh on 05.09.2015.
  */
@@ -16,6 +19,8 @@ public abstract class Model<K> implements BaseColumns {
     }
 
     public abstract K getId();
+
+    protected final Map<String, Object> map = new HashMap<>();
 
     @Override
     public boolean equals(Object o) {

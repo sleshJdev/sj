@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import by.slesh.sj.database.core.Database;
@@ -28,7 +27,24 @@ public class ContactRepository extends Repository<Contact, Integer> {
         mCallRepository = new CallRepository(database);
     }
 
-    public void updateAll() {
+    public String getStatus(Integer id) {
+        try {
+            String[] columns = new String[]{Contact.ATTRIBUTE_STATUS};
+            String[] arguments = new String[]{id.toString()};
+            String where = Contact._ID + " = ?";
+            connection = openConnection();
+            cursor = connection.query(getTableName(), columns, where, arguments, null, null, null);
+            cursor.moveToFirst();
+            if (!cursor.isAfterLast()) {
+                return cursor.getString(cursor.getColumnIndex(Contact.STATUS_FIELD));
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getStatus: error during fetch status", e);
+        }
+        return null;
+    }
+
+    public void updateAllStatuses() {
         try {
             List<Contact> contacts = super.findAll();
             if (contacts != null && contacts.size() > 0) {
@@ -37,14 +53,14 @@ public class ContactRepository extends Repository<Contact, Integer> {
                 final String[] arguments = new String[1];
                 connection = openConnection();
                 for (Contact contact : contacts) {
-                    String status = StatusResolver.getStatus(contact.getQuantityCalls() + contact.getQuantitySms()).getName();
+                    String status = StatusResolver.getStatus(contact.getQuantityCalls() + contact.getQuantitySms());
                     values.put(Contact.STATUS_FIELD, status);
                     arguments[0] = contact.getId().toString();
                     connection.update(getTableName(), values, whereFormat, arguments);
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, "updateAll: error during updating contacts", e);
+            Log.e(TAG, "updateAllStatuses: error during updating contacts", e);
         } finally {
             close();
         }
@@ -61,10 +77,11 @@ public class ContactRepository extends Repository<Contact, Integer> {
     @Override
     public Contact findOne(Integer id) {
         Contact sjContact = super.findOne(id);
-        sjContact = join(sjContact, mContactLoader.findOne(id));
-        sjContact.setCalls(mCallRepository.findAllForContact(sjContact));
-        sjContact.setSms(mSmsRepository.findAllForContact(sjContact));
-
+        if (sjContact != null) {
+            sjContact = join(sjContact, mContactLoader.findOne(id));
+            sjContact.setCalls(mCallRepository.findAllForContact(sjContact));
+            sjContact.setSms(mSmsRepository.findAllForContact(sjContact));
+        }
         Log.d(TAG, "findOne: contact:" + sjContact);
 
         return sjContact;
@@ -88,36 +105,6 @@ public class ContactRepository extends Repository<Contact, Integer> {
     }
 
     @Override
-    public Integer delete(Integer id) {
-        Log.d(TAG, "delete: delete contact with id: " + id);
-        mSmsRepository.deleteForContact(id);
-        mCallRepository.deleteForContact(id);
-        return super.delete(id);
-    }
-
-    public Contact findByPhone(String phone) {
-        try {
-            String where = Contact.PHONE_FIELD + " like ?";
-            String[] arguments = new String[]{String.format("%%%s%%", phone)};
-            String[] columns = new String[]{getIdName()};
-            connection = openConnection();
-            cursor = connection.query(Contact.TABLE_NAME, columns, where, arguments, null, null, null);
-            cursor.moveToFirst();
-            if (!cursor.isAfterLast()) {
-                Contact contact = findOne(cursor.getInt(cursor.getColumnIndex(getIdName())));
-                Log.d(TAG, "findByPhone: found:" + contact + ",where:" + where + ",columns:" + Arrays.toString(columns) + ",arguments:" + Arrays.toString(arguments));
-                return contact;
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "findByPhone: error during search contact by phone " + phone, e);
-        } finally {
-            close();
-        }
-        Log.d(TAG, "findByPhone: not found contact with phone " + phone);
-        return null;
-    }
-
-    @Override
     public String getTableName() {
         return Contact.TABLE_NAME;
     }
@@ -132,7 +119,6 @@ public class ContactRepository extends Repository<Contact, Integer> {
         Contact contact = new Contact();
         contact.setId(cursor.getInt(cursor.getColumnIndex(getIdName())));
         contact.setDate(cursor.getInt(cursor.getColumnIndex(Contact.DATE_FIELD)));
-        contact.setPhone(cursor.getString(cursor.getColumnIndex(Contact.PHONE_FIELD)));
         contact.setStatus(cursor.getString(cursor.getColumnIndex(Contact.STATUS_FIELD)));
 
         return contact;

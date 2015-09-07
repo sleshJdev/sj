@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import by.slesh.sj.database.core.Database;
@@ -35,13 +36,33 @@ public class ContactLoader {
             cursor.moveToFirst();
             return readContact(cursor);
         } catch (Exception e) {
-
             Log.e(TAG, "error during get contact with id " + id, e);
-
         } finally {
             Database.close(cursor);
         }
 
+        return null;
+    }
+
+    public Contact findByPhone(String phone) {
+        Cursor cursor = null;
+        try {
+            String[] arguments = new String[]{String.format("%%%s%%", phone)};
+            String[] columns = new String[]{_ID};
+            String where = NORMALIZED_NUMBER + " like ?";
+            cursor = context.getContentResolver().query(CONTENT_URI, columns, where, arguments, null);
+            cursor.moveToFirst();
+            if (!cursor.isAfterLast()) {
+                Contact contact = findOne(cursor.getInt(cursor.getColumnIndex(_ID)));
+                Log.d(TAG, "findByPhone: found:" + contact + ",where:" + where + ",columns:" + Arrays.toString(columns) + ",arguments:" + Arrays.toString(arguments));
+                return contact;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "findByPhone: error during search contact by phone " + phone, e);
+        } finally {
+            Database.close(cursor);
+        }
+        Log.d(TAG, "findByPhone: not found contact with phone " + phone);
         return null;
     }
 

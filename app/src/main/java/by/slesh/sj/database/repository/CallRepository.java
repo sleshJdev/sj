@@ -16,33 +16,12 @@ public class CallRepository extends Repository<Call, Integer> {
         super(database);
     }
 
-    public Integer deleteForContact(Integer id) {
-        return super.delete(Call.WHO_CALLED_ID_FIELD + " = ?", new String[]{id.toString()});
-    }
-
     public List<Call> findAllForContact(Contact contact) {
         String where = Call.WHO_CALLED_ID_FIELD + " = ?";
         String[] arguments = new String[]{contact.getId().toString()};
         String orderBy = Call.DATE_FIELD + " ASC";
 
         return super.findAll(where, arguments, orderBy);
-    }
-
-    public Integer count(Contact contact) {
-        String where = Call.WHO_CALLED_ID_FIELD + " = ?";
-        String[] arguments = new String[]{contact.getId().toString()};
-
-        return super.count(where, arguments);
-    }
-
-    @Override
-    public String getTableName() {
-        return Call.TABLE_NAME;
-    }
-
-    @Override
-    public String getIdName() {
-        return Call._ID;
     }
 
     @Override
@@ -53,5 +32,15 @@ public class CallRepository extends Repository<Call, Integer> {
         call.setWhoCalledId(cursor.getInt(cursor.getColumnIndex(Call.WHO_CALLED_ID_FIELD)));
 
         return call;
+    }
+
+    @Override
+    public String getTableName() {
+        return Call.TABLE_NAME;
+    }
+
+    @Override
+    public String getIdName() {
+        return Call._ID;
     }
 }

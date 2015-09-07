@@ -3,7 +3,6 @@ package by.slesh.sj.database.local;
 import java.util.Random;
 
 import by.slesh.sj.activity.R;
-import by.slesh.sj.database.local.model.Status;
 
 /**
  * Created by slesh on 05.09.2015.
@@ -48,19 +47,27 @@ public final class StatusResolver {
             "Лучший" //25
     };
 
-    public static Status getStatus(int points) {
+    public static String getStatus(int points) {
+        return getPair(points)[0].toString();
+    }
+
+    public static Integer getGraphic(int points) {
+        return (Integer) getPair(points)[1];
+    }
+
+    private static Object[] getPair(int points) {
         if (points > 27) {
-            return new Status(STATUS_NAMES[randomFromInterval(16, 25)], R.drawable.status5);
+            return new Object[]{STATUS_NAMES[randomFromInterval(16, 25)], R.drawable.status5};
         } else if (points > 17) {
-            return new Status(STATUS_NAMES[randomFromInterval(11, 15)], R.drawable.status4);
+            return new Object[]{STATUS_NAMES[randomFromInterval(11, 15)], R.drawable.status4};
         } else if (points > 14) {
-            return new Status(STATUS_NAMES[randomFromInterval(7, 10)], R.drawable.status3);
+            return new Object[]{STATUS_NAMES[randomFromInterval(7, 10)], R.drawable.status3};
         } else if (points > 10) {
-            return new Status(STATUS_NAMES[randomFromInterval(7, 10)], R.drawable.status2);
+            return new Object[]{STATUS_NAMES[randomFromInterval(7, 10)], R.drawable.status2};
         } else if (points > 3) {
-            return new Status(STATUS_NAMES[randomFromInterval(4, 6)], R.drawable.status1);
+            return new Object[]{STATUS_NAMES[randomFromInterval(4, 6)], R.drawable.status1};
         } else {
-            return new Status(STATUS_NAMES[randomFromInterval(0, 3)], R.drawable.status0);
+            return new Object[]{STATUS_NAMES[randomFromInterval(0, 3)], R.drawable.status0};
         }
     }
 }

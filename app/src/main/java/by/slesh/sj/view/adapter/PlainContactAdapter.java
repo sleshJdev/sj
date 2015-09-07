@@ -9,13 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import by.slesh.sj.activity.R;
+import by.slesh.sj.util.SjUtil;
 import by.slesh.sj.view.adapter.binder.PlainContactBinder;
 import by.slesh.sj.database.core.Database;
 import by.slesh.sj.database.model.Contact;
 import by.slesh.sj.database.repository.ContactRepository;
 import by.slesh.sj.device.ContactLoader;
-import by.slesh.sj.util.Converter;
-import by.slesh.sj.util.StringUtil;
 
 import static by.slesh.sj.database.model.Contact.*;
 
@@ -50,12 +49,12 @@ public class PlainContactAdapter extends SimpleAdapter {
         List<Contact> sjContacts = contactRepository.findAll();
 
         for (Contact contact : allContacts) {
-            if (StringUtil.isBlank(contact.getPhone())) {
+            if (SjUtil.isBlank(contact.getPhone())) {
                 Log.d(TAG, "contact will be skipped, don't have phone. " + contact);
                 continue;
             }
             if (!sjContacts.contains(contact)) {
-                data.add(Converter.toMap(contact));
+                data.add(SjUtil.toMap(contact));
             }
         }
 

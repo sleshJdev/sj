@@ -14,7 +14,6 @@ public class DatabaseSchemaCreator {
             " create table " + Contact.TABLE_NAME + " ( " +
                     Contact._ID + " integer primary key, " +
                     Contact.DATE_FIELD + " integer default 0, " +
-                    Contact.PHONE_FIELD + " varchar(15) not null, " +
                     Contact.STATUS_FIELD + " varchar(30) default null " +
             " ) ";
 
@@ -23,7 +22,7 @@ public class DatabaseSchemaCreator {
                 Call._ID + " integer primary key, " +
                 Call.DATE_FIELD + " integer default 0, " +
                 Call.WHO_CALLED_ID_FIELD + " integer not null, " +
-                    " foreign key (" + Call.WHO_CALLED_ID_FIELD + ") references " + Contact.TABLE_NAME + "(" + Contact._ID + ")" +
+                    " foreign key (" + Call.WHO_CALLED_ID_FIELD + ") references " + Contact.TABLE_NAME + "(" + Contact._ID + ") on delete cascade" +
             " ) ";
 
     public static final String CREATE_TABLE_SMS_QUERY =
@@ -31,7 +30,7 @@ public class DatabaseSchemaCreator {
                 Sms._ID + " integer primary key, " +
                 Sms.DATE_FIELD + " integer default 0, " +
                 Sms.SENDER_ID_FIELD + " integer not null, " +
-                    " foreign key (" + Sms.SENDER_ID_FIELD + ") references " + Contact.TABLE_NAME + "(" + Contact._ID + ")" +
+                    " foreign key (" + Sms.SENDER_ID_FIELD + ") references " + Contact.TABLE_NAME + "(" + Contact._ID + ") on delete cascade" +
             " ) ";
 
     public static final void initialize(SQLiteDatabase connection){

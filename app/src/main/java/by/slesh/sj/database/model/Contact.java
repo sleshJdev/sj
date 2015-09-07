@@ -4,13 +4,14 @@ import android.content.ContentValues;
 
 import java.util.List;
 
+import by.slesh.sj.database.local.StatusResolver;
+
 /**
  * Created by slesh on 05.09.2015.
  */
 public class Contact extends Model<Integer> {
     public static final String TABLE_NAME = "contacts";
 
-    public static final String PHONE_FIELD = "phone";
     public static final String DATE_FIELD = "date";
     public static final String STATUS_FIELD = "status";
 
@@ -18,11 +19,11 @@ public class Contact extends Model<Integer> {
     public static final String ATTRIBUTE_NAME = "name";
     public static final String ATTRIBUTE_AVATAR = "avatar";
     public static final String ATTRIBUTE_GRAPHIC = "graphic";
+    public static final String ATTRIBUTE_PHONE = "phone";
     public static final String ATTRIBUTE_QUANTITY_SMS = "quantity-sms";
     public static final String ATTRIBUTE_QUANTITY_CALLS = "quantity-calls";
     public static final String ATTRIBUTE_STATUS = STATUS_FIELD;
     public static final String ATTRIBUTE_DATE = DATE_FIELD;
-    public static final String ATTRIBUTE_PHONE = PHONE_FIELD;
 
     private Integer mId;
     private String mName;
@@ -32,13 +33,14 @@ public class Contact extends Model<Integer> {
     private String mAvatarPath;
     private List<Call> mCalls;
     private List<Sms> mSms;
+    private Integer mGraphic;
 
     public Contact() {
     }
 
-    public Contact(Integer id, String phone) {
+    public Contact(Integer id, Integer date) {
         this.mId = id;
-        this.mPhone = phone;
+        this.mDate = date;
     }
 
     @Override
@@ -46,7 +48,6 @@ public class Contact extends Model<Integer> {
         ContentValues values = new ContentValues();
         values.put(_ID, getId());
         values.put(DATE_FIELD, getDate());
-        values.put(PHONE_FIELD, getPhone());
         values.put(STATUS_FIELD, getStatus());
 
         return values;
@@ -67,6 +68,10 @@ public class Contact extends Model<Integer> {
 
     public void setCalls(List<Call> calls) {
         this.mCalls = calls;
+    }
+
+    public List<Call> getCalls() {
+        return mCalls;
     }
 
     public List<Sms> getSms() {
@@ -109,16 +114,16 @@ public class Contact extends Model<Integer> {
         this.mDate = date;
     }
 
-    public List<Call> getCalls() {
-        return mCalls;
-    }
-
     public String getStatus() {
         return mStatus;
     }
 
     public void setStatus(String status) {
         this.mStatus = status;
+    }
+
+    public Integer getGraphic() {
+        return StatusResolver.getGraphic(getQuantityCalls() + getQuantitySms());
     }
 
     public String getAvatarPath() {

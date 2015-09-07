@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import by.slesh.sj.util.SjUtil;
 import by.slesh.sj.view.adapter.PlainContactAdapter;
 import by.slesh.sj.database.core.Database;
 import by.slesh.sj.database.model.Contact;
 import by.slesh.sj.database.repository.ContactRepository;
-import by.slesh.sj.util.DateUtil;
 
 /**
  * Created by slesh on 05.09.2015.
@@ -45,26 +45,20 @@ public class PlainContactsActivity extends Activity implements AdapterView.OnIte
         list.setOnItemClickListener(this);
     }
 
-    private List<Contact> selectedContactsId = new ArrayList<>();
+    private List<Integer> selectedContactsId = new ArrayList<>();
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Map<String, Object> objectMap = (Map<String, Object>) parent.getItemAtPosition(position);
         Integer contactId = Integer.valueOf(objectMap.get(Contact._ID).toString());
-        String phone = objectMap.get(Contact.PHONE_FIELD).toString();
-        Contact contact = new Contact(contactId, phone);
-        if (selectedContactsId.contains(contact)) {
+        if (selectedContactsId.contains(contactId)) {
             view.setBackgroundResource(R.drawable.selector_grey_item_background);
-            selectedContactsId.remove(contact);
-
-            Log.d(TAG, "unchecked contact: " + contact.getPhone() + ", id: " + contact.getId());
-
+            selectedContactsId.remove(contactId);
+            Log.d(TAG, "unchecked contact: , id: " + contactId);
         } else {
             view.setBackgroundResource(R.drawable.selector_green_item_background);
-            selectedContactsId.add(contact);
-
-            Log.d(TAG, "checked contact: " + contact.getPhone() + ", id: " + contact.getId());
-
+            selectedContactsId.add(contactId);
+            Log.d(TAG, "checked contact: , id: " + contactId);
         }
 
         if (selectedContactsId.isEmpty()) {
@@ -76,11 +70,11 @@ public class PlainContactsActivity extends Activity implements AdapterView.OnIte
 
     @Override
     public void onClick(View v) {
-        Integer date = DateUtil.getUnixTime();
-        for (Contact contact : selectedContactsId) {
-            contact.setDate(date);
-            Log.d(TAG, "save contact to sj " + contact);
+        Integer date = SjUtil.getUnixTime();
+        for (Integer contactID : selectedContactsId) {
+            Contact contact = new Contact(contactID, date);
             contactRepository.save(contact);
+            Log.d(TAG, "save contact to sj " + contact);
         }
         Log.d(TAG, "user select " + selectedContactsId.size() + ". move to main activity");
         Intent intent = new Intent(this, MainActivity.class);

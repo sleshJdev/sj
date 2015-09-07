@@ -13,42 +13,45 @@ import by.slesh.sj.callback.Action;
 import by.slesh.sj.database.core.Database;
 import by.slesh.sj.database.local.SjPreferences;
 import by.slesh.sj.database.repository.ContactRepository;
-import by.slesh.sj.util.DateUtil;
+import by.slesh.sj.util.SjUtil;
 
 /**
  * Created by slesh on 06.09.2015.
  */
-public abstract class UpdatableActivity extends Activity {
-    private static final String TAG = UpdatableActivity.class.getCanonicalName();
+public abstract class PeriodicUpdatableActivity extends Activity {
+    private static final String TAG = PeriodicUpdatableActivity.class.getCanonicalName();
 
-    private Timer timer;
-    private final Handler HANDLER = new Handler();
-    private Runnable worker = new Runnable() {
+    private class Worker implements Runnable {
+        long lastUpdateTime = 0;
+
         @Override
         public void run() {
             try {
-                long period = TimeUnit.HOURS.toSeconds(Integer.valueOf(SjPreferences.get(getApplicationContext(), SjPreferences.Key.HISTORY_PERIOD)));
-                long lastUpdateTime = Integer.valueOf(SjPreferences.get(getApplicationContext(), SjPreferences.Key.LAST_UPDATE_TIME));
-                long nowTime = DateUtil.getUnixTime();
+                long period = SjPreferences.getInteger(getApplicationContext(), SjPreferences.Key.MAIN_PERIOD);
+                long nowTime = SjUtil.getUnixTime();
                 //TODO: remove
                 period = 30;//for test
                 if (nowTime > lastUpdateTime + period) {
-                    if (action != null) {
-                        action.perform(null);
+                    if (mAction != null) {
+                        mAction.perform(null);
                     }
-                    contactRepository.updateAll();
-                    SjPreferences.set(getApplicationContext(), SjPreferences.Key.LAST_UPDATE_TIME, Long.toString(nowTime));
+                    contactRepository.updateAllStatuses();
+                    lastUpdateTime = nowTime;
                 }
             } catch (Exception e) {
                 Log.d(getClass().getCanonicalName(), "run: error during updating sj contacts list view", e);
             }
         }
-    };
-    private Action action;
-    private ContactRepository contactRepository;
+    }
 
-    public UpdatableActivity() {
-        Log.d(TAG, "UpdatableActivity: constructor");
+    ;private Timer mTimer;
+    private final Handler HANDLER = new Handler();
+    private Action mAction;
+    private ContactRepository contactRepository;
+    private Worker mWorker = new Worker();
+
+    public PeriodicUpdatableActivity() {
+        Log.d(TAG, "PeriodicUpdatableActivity: constructor");
     }
 
     @Override
@@ -60,13 +63,13 @@ public abstract class UpdatableActivity extends Activity {
     }
 
     protected void setAction(Action action) {
-        this.action = action;
+        this.mAction = action;
     }
 
     protected void runUpdating() {
-        if (timer == null) {
-            timer = new Timer();
-            timer.schedule(new TimerTask() {
+        if (mTimer == null) {
+            mTimer = new Timer();
+            mTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     checkForUpdate();
@@ -77,18 +80,16 @@ public abstract class UpdatableActivity extends Activity {
     }
 
     protected void stopUpdating() {
-        if (timer != null) {
-            timer.cancel();
-            timer.purge();
-            timer = null;
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer.purge();
+            mTimer = null;
             Log.d(TAG, "stopUpdating: stop updating");
         }
     }
 
     private void checkForUpdate() {
-        if (worker != null) {
-            HANDLER.post(worker);
-        }
+        HANDLER.post(mWorker);
     }
 
     @Override

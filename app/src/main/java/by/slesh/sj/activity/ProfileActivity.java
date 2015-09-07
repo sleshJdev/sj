@@ -13,7 +13,7 @@ import by.slesh.sj.callback.Action;
 import by.slesh.sj.database.model.Contact;
 
 
-public class ProfileActivity extends UpdatableActivity implements Action, View.OnClickListener {
+public class ProfileActivity extends PeriodicUpdatableActivity implements Action, View.OnClickListener {
     private static final String TAG = ProfileActivity.class.getCanonicalName();
 
     private ListView mSjContactActivityList;

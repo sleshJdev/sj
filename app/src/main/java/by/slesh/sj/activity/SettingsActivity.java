@@ -17,26 +17,33 @@ import java.util.concurrent.TimeUnit;
 import by.slesh.sj.callback.Action;
 import by.slesh.sj.database.core.Database;
 import by.slesh.sj.database.local.SjPreferences;
-import by.slesh.sj.database.local.model.Period;
-import by.slesh.sj.database.model.Call;
-import by.slesh.sj.database.model.Sms;
 import by.slesh.sj.database.repository.CallRepository;
 import by.slesh.sj.database.repository.SmsRepository;
-import by.slesh.sj.util.DateUtil;
 
 public class SettingsActivity extends Activity implements View.OnClickListener {
     private static final String TAG = SettingsActivity.class.getCanonicalName();
 
-    private AlertDialog.Builder builder;
+    public static class Period {
+        public String name;
+        public Integer value;
+
+        public Period(String name, Integer value) {
+            this.name = name;
+            this.value = value;
+        }
+    }
 
     private static final Map<Integer, Period> PERIODS = new HashMap<>();
 
     static {
-        PERIODS.put(R.id.hour, new Period("1 час", "1"));
-        PERIODS.put(R.id.day, new Period("День", "24"));
-        PERIODS.put(R.id.day3, new Period("3 дня", "72"));
-        PERIODS.put(R.id.day7, new Period("7 дней", "172"));
+        PERIODS.put(R.id.hour, new Period("1 час", (int) TimeUnit.HOURS.toSeconds(1)));
+        PERIODS.put(R.id.day, new Period("1 день", (int) TimeUnit.DAYS.toSeconds(1)));
+        PERIODS.put(R.id.day3, new Period("3 дня", (int) TimeUnit.DAYS.toSeconds(3)));
+        PERIODS.put(R.id.day7, new Period("7 дней", (int) TimeUnit.DAYS.toSeconds(7)));
     }
+
+    private AlertDialog.Builder builder;
+
 
     private SmsRepository smsRepository;
     private CallRepository callRepository;
@@ -63,7 +70,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
 
     private void setupCheckbox(Integer id, SjPreferences.Key propertyToCheck) {
         CheckBox checkBox = (CheckBox) findViewById(id);
-        Boolean currentState = Boolean.parseBoolean(SjPreferences.get(getApplicationContext(), propertyToCheck));
+        Boolean currentState = SjPreferences.getBoolean(getApplicationContext(), propertyToCheck);
         checkBox.setChecked(currentState);
     }
 
@@ -71,23 +78,26 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.settings_period:
-                changePeriod(SjPreferences.Key.HISTORY_PERIOD, new Action() {
+                changePeriod(R.layout.dialog_period,
+                        SjPreferences.Key.MAIN_PERIOD,
+                        new Action() {
                             @Override
                             public void perform(Object data) {
                                 Period period = (Period) data;
-                                Toast.makeText(getApplicationContext(), "Период истории изменен на " + period.getName(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Период истории изменен на " + period.name, Toast.LENGTH_SHORT).show();
                             }
                         }
                 );
                 break;
             case R.id.delete_history_button:
-                changePeriod(SjPreferences.Key.HISTORY_CLEAN_PERIOD, new Action() {
-                    @Override
-                    public void perform(Object data) {
-                        cleanHistory((Period) data);
-                    }
-                });
-
+                changePeriod(R.layout.dialog_delete_period,
+                        SjPreferences.Key.HISTORY_CLEAN_PERIOD,
+                        new Action() {
+                            @Override
+                            public void perform(Object data) {
+//                                cleanHistory((Period) data);
+                            }
+                        });
                 break;
             case R.id.is_show_call_checkbox:
                 setIsShowCalls(((CheckBox) v).isChecked());
@@ -98,12 +108,12 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void changePeriod(final SjPreferences.Key changeableProperty, final Action action) {
-        View dialog = getLayoutInflater().inflate(R.layout.dialog_period, null);
+    private void changePeriod(final Integer dialogId, final SjPreferences.Key changeableProperty, final Action action) {
+        View dialog = getLayoutInflater().inflate(dialogId, null);
 
-        String currentPeriod = SjPreferences.get(getApplicationContext(), changeableProperty);
+        Integer currentPeriod = SjPreferences.getInteger(getApplicationContext(), changeableProperty);
         for (Integer id : PERIODS.keySet()) {
-            if (currentPeriod.equals(PERIODS.get(id).getValue())) {
+            if (currentPeriod.equals(PERIODS.get(id).value)) {
                 ((RadioButton) dialog.findViewById(id)).setChecked(true);
                 break;
             }
@@ -117,7 +127,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (PERIODS.containsKey(checkedId)) {
                     Period period = PERIODS.get(checkedId);
-                    SjPreferences.set(getApplicationContext(), changeableProperty, period.getValue());
+                    SjPreferences.set(getApplicationContext(), changeableProperty, period.value.toString());
                     if (action != null) {
                         action.perform(period);
                     }
@@ -138,15 +148,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         SjPreferences.set(getApplicationContext(), SjPreferences.Key.IS_SHOW_SMS_IN_LIST, state.toString());
         Toast.makeText(getApplicationContext(), "Теперь смс " + (state ? "будут" : "не будут") + " показываться", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Изменены настройки. Показывать смс в спике: " + state);
-
     }
 
-    private void cleanHistory(Period period) {
-        Integer periodSeconds = (int) TimeUnit.HOURS.toSeconds(Long.valueOf(period.getValue()));
-        Integer date = DateUtil.getUnixTime() - periodSeconds;
-        Integer deletedSms = smsRepository.delete(Sms.DATE_FIELD + " > ?", new String[]{date.toString()});
-        Integer deletedCalls = callRepository.delete(Call.DATE_FIELD + " > ?", new String[]{date.toString()});
 
-        Toast.makeText(getApplicationContext(), String.format("История очищена за период %s. Удалено %d звонков и %d смс.", period.getName(), deletedCalls, deletedSms), Toast.LENGTH_SHORT).show();
-    }
 }

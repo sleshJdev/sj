@@ -18,23 +18,8 @@ public class SmsRepository extends Repository<Sms, Integer> {
         super(database);
     }
 
-    public Integer deleteForContact(Integer id) {
-        return super.delete(Sms.SENDER_ID_FIELD + " = ?", new String[]{id.toString()});
-    }
-
     public List<Sms> findAllForContact(Contact contact) {
-        String where = Sms.SENDER_ID_FIELD + " = ?";
-        String[] arguments = new String[]{contact.getId().toString()};
-        String orderBy = Sms.DATE_FIELD + " ASC";
-
-        return super.findAll(where, arguments, orderBy);
-    }
-
-    public Integer count(Contact contact) {
-        String where = Sms.SENDER_ID_FIELD + " = ?";
-        String[] arguments = new String[]{contact.getId().toString()};
-
-        return super.count(where, arguments);
+        return super.findAll(Sms.SENDER_ID_FIELD + " = ?", new String[]{contact.getId().toString()}, Sms.DATE_FIELD + " ASC");
     }
 
     @Override

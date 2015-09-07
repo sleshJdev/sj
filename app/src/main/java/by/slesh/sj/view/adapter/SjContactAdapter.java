@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import by.slesh.sj.activity.R;
-import by.slesh.sj.database.local.SjPreferences;
+import by.slesh.sj.util.SjUtil;
 import by.slesh.sj.view.adapter.binder.SjContactBinder;
 import by.slesh.sj.database.core.Database;
 import by.slesh.sj.database.model.Contact;
@@ -16,7 +16,6 @@ import by.slesh.sj.database.model.Contact;
 import static by.slesh.sj.database.model.Contact.*;
 
 import by.slesh.sj.database.repository.ContactRepository;
-import by.slesh.sj.util.Converter;
 
 /**
  * Created by slesh on 05.09.2015.
@@ -59,9 +58,7 @@ public class SjContactAdapter extends SimpleAdapter {
         List<Contact> contacts = contactRepository.findAll();
         List<Map<String, Object>> data = new ArrayList<>(contacts.size());
         for (Contact contact : contacts) {
-            Map<String, Object> objectMap = Converter.toMap(contact);
-            objectMap.put(_ID, contact.getId());
-            data.add(objectMap);
+            data.add(SjUtil.toMap(contact));
         }
 
         return data;
