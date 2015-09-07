@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_grey_item_background"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/item_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingBottom="2dp">
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:layout_marginLeft="10dp"
+                android:text="@string/demo_date"
+                android:textColor="@color/profile_stat_date"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="top"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingTop="7dp">
+
+            <ImageView
+                android:id="@+id/user_icon"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center"
+                android:layout_marginBottom="3dp"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/user_icon" />
+
+            <by.slesh.sj.view.view.PFdinMediumFont
+                android:id="@+id/status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|top"
+                android:layout_marginBottom="4dp"
+                android:text="@string/demo_status"
+                android:textColor="@color/profile_stat_status"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <by.slesh.sj.view.view.PFdinMediumFontGradientBlue
+            android:id="@+id/count_sms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:text="17"
+            android:textColor="@color/main_dalay"
+            android:textSize="24sp" />
+
+        <by.slesh.sj.view.view.PFdinFont
+            android:id="@+id/count_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/calls"
+            android:textColor="@color/profile_stat_date"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <by.slesh.sj.view.view.PFdinMediumFontGradientBlue
+            android:id="@+id/count_call"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="1dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:text="17"
+            android:textColor="@color/main_dalay"
+            android:textSize="24sp" />
+
+        <by.slesh.sj.view.view.PFdinFont
+            android:id="@+id/count_name2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sms"
+            android:textColor="@color/profile_stat_date"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/share"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ic_fa_share_alt_square" />
+</LinearLayout>

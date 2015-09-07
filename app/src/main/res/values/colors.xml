@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue">#164698</color>
+    <color name="stroke_text">#224e9c</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_white_gradient">#aed8f3</color>
+    <color name="small_grey">#515151</color>
+    <color name="main_dalay">#0d62ac</color>
+    <color name="add_contact_gradient_1">#0680c6</color>
+    <color name="add_contact_gradient_2">#0e63af</color>
+    <color name="remove_contact_gradient_1">#ff1a00</color>
+    <color name="remove_contact_gradient_2">#bd0101</color>
+
+    <color name="profile_stat_date">#8a8a8a</color>
+    <color name="profile_stat_status">#151515</color>
+    <color name="transparent">#00000000</color>
+</resources>

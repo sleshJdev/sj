@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/header_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/header_background"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <by.slesh.sj.view.view.GradientTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:shadowColor="@color/stroke_text"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="4"
+                android:text="Выберите период"
+                android:textAllCaps="true"
+                android:textColor="@color/text_white"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RadioGroup
+        android:id="@+id/period_options"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RadioButton
+            android:id="@+id/hour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/selector_grey_item_background"
+            android:button="@null"
+            android:drawableRight="@android:drawable/btn_radio"
+            android:padding="10dp"
+            android:text="Час"
+            android:textColor="@color/small_grey"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/day"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/selector_grey_item_background"
+            android:button="@null"
+            android:drawableRight="@android:drawable/btn_radio"
+            android:padding="10dp"
+            android:text="День"
+            android:textColor="@color/small_grey"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/day3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/selector_grey_item_background"
+            android:button="@null"
+            android:drawableRight="@android:drawable/btn_radio"
+            android:padding="10dp"
+            android:text="3 дня"
+            android:textColor="@color/small_grey"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/day7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/selector_grey_item_background"
+            android:button="@null"
+            android:drawableRight="@android:drawable/btn_radio"
+            android:padding="10dp"
+            android:text="7 дней"
+            android:textColor="@color/small_grey"
+            android:textSize="18sp" />
+    </RadioGroup>
+
+</LinearLayout>
