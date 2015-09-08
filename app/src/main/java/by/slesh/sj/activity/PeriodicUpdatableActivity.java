@@ -1,6 +1,7 @@
 package by.slesh.sj.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -31,9 +32,9 @@ public abstract class PeriodicUpdatableActivity extends Activity {
                 long nowTime = SjUtil.getUnixTime();
                 //TODO: remove
                 period = 30;//for test
-                if (nowTime > lastUpdateTime + period) {
+                if (nowTime - period > lastUpdateTime) {
                     if (mAction != null) {
-                        mAction.perform(null);
+                        mAction.performAction(null);
                     }
                     contactRepository.updateAllStatuses();
                     lastUpdateTime = nowTime;
@@ -44,7 +45,7 @@ public abstract class PeriodicUpdatableActivity extends Activity {
         }
     }
 
-    ;private Timer mTimer;
+    private Timer mTimer;
     private final Handler HANDLER = new Handler();
     private Action mAction;
     private ContactRepository contactRepository;
@@ -58,18 +59,30 @@ public abstract class PeriodicUpdatableActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: create");
+        Intent.ShortcutIconResource icon =
+                Intent.ShortcutIconResource.fromContext(this, R.drawable.icon);
+
+        Intent intent = new Intent();
+
+        Intent launchIntent = new Intent(this, PeriodicUpdatableActivity.class);
+
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent);
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "slesh");
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, R.string.app_name_short);
+
+        setResult(RESULT_OK, intent);
         contactRepository = new ContactRepository(new Database(this));
-        runUpdating();
+        mTimer = startTimer(mTimer);
     }
 
-    protected void setAction(Action action) {
+    protected void setPeriodicAction(Action action) {
         this.mAction = action;
     }
 
-    protected void runUpdating() {
-        if (mTimer == null) {
-            mTimer = new Timer();
-            mTimer.schedule(new TimerTask() {
+    private Timer startTimer(Timer timer) {
+        if (timer == null) {
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     checkForUpdate();
@@ -77,39 +90,43 @@ public abstract class PeriodicUpdatableActivity extends Activity {
             }, 0, TimeUnit.SECONDS.toMillis(5));
             Log.d(TAG, "runUpdating: start updating");
         }
+
+        return timer;
     }
 
-    protected void stopUpdating() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer.purge();
-            mTimer = null;
+    private Timer stopTime(Timer time) {
+        if (time != null) {
+            time.cancel();
+            time.purge();
+            time = null;
             Log.d(TAG, "stopUpdating: stop updating");
         }
+
+        return time;
     }
 
     private void checkForUpdate() {
         HANDLER.post(mWorker);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: resume activity");
-        runUpdating();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        Log.d(TAG, "onResume: resume activity");
+//        mTimer = startTimer(mTimer);
+//    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy: destroy activity");
-        stopUpdating();
+//        mTimer = startTimer(mTimer);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: stop activity");
-        stopUpdating();
-    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        Log.d(TAG, "onStop: stop activity");
+//        mTimer = stopTime(mTimer);
+//    }
 }

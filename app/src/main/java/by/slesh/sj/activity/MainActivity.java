@@ -3,7 +3,6 @@ package by.slesh.sj.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.Toast;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 import by.slesh.sj.database.model.Call;
@@ -40,29 +38,6 @@ public class MainActivity extends PeriodicUpdatableActivity implements View.OnCl
     private ContactRepository mContactRepository;
     private SmsRepository mSmsRepository;
     private CallRepository mCallRepository;
-
-    private Timer mDeleteTimer;
-    private Handler mDeleteHandler = new Handler();
-
-    private class HistoryCleaner implements Runnable {
-        long lastTime = 0;
-
-        @Override
-        public void run() {
-            long period = SjPreferences.getInteger(getApplicationContext(), SjPreferences.Key.MAIN_PERIOD);
-            long nowTime = SjUtil.getUnixTime();
-            if (nowTime - lastTime > period) {
-                Integer periodSeconds = (int) TimeUnit.HOURS.toSeconds(Long.valueOf(period));
-                Integer date = SjUtil.getUnixTime() - periodSeconds;
-                Integer deletedSms = mSmsRepository.delete(Sms.DATE_FIELD + " > ?", new String[]{date.toString()});
-                Integer deletedCalls = mCallRepository.delete(Call.DATE_FIELD + " > ?", new String[]{date.toString()});
-                
-                Toast.makeText(getApplicationContext(), String.format("История очищена за период . Удалено %d звонков и %d смс.", deletedCalls, deletedSms), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private HistoryCleaner mHistoryCleaner = new HistoryCleaner();
 
     public MainActivity() {
         Log.d(TAG, "MainActivity: constructor");
@@ -91,17 +66,7 @@ public class MainActivity extends PeriodicUpdatableActivity implements View.OnCl
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         telephonyManager.listen(new CallListener(this), PhoneStateListener.LISTEN_CALL_STATE);
 
-        setAction(this);
-    }
-
-    private void cleanHistory(SettingsActivity.Period period) {
-        mDeleteHandler.post(mHistoryCleaner);
-    }
-
-    private void startCleaning(){
-        if(mDeleteTimer == null){
-            mDeleteTimer = new Timer();
-        }
+        setPeriodicAction(this);
     }
 
     private void updateSjContactsList() {
@@ -114,17 +79,32 @@ public class MainActivity extends PeriodicUpdatableActivity implements View.OnCl
             Log.d(TAG, "updateSjContactsList: new status: " + status);
         }
         mSjContactAdapter.notifyDataSetChanged();
+        Toast.makeText(getApplicationContext(), String.format("Статусы контактов обновлены."), Toast.LENGTH_SHORT).show();
         Log.d(TAG, "updateSjContactsList: update is done at " + SjUtil.getDate("MM-dd-yyyy hh:mm:ss"));
     }
 
-    @Override
-    public void perform(Object data) {
-        updateSjContactsList();
+    private void cleanSjHistory() {
+        Integer cleanPeriod = SjPreferences.getInteger(getApplicationContext(), SjPreferences.Key.HISTORY_CLEAN_PERIOD);
+        if (cleanPeriod > 0) {
+            Integer date = SjUtil.getUnixTime() - cleanPeriod;
+            Integer deletedSms = mSmsRepository.delete(Sms.DATE_FIELD + " > ?", new String[]{date.toString()});
+            Integer deletedCalls = mCallRepository.delete(Call.DATE_FIELD + " > ?", new String[]{date.toString()});
+            Toast.makeText(getApplicationContext(), String.format("История очищена. Удалено %d звонков и %d смс.", deletedCalls, deletedSms), Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "cleanSjHistory: sj contacts history cleaned " + SjUtil.getDate("MM-dd-yyyy hh:mm:ss"));
+        }else{
+            Log.d(TAG, "cleanSjHistory: disable");
+        }
     }
 
     @Override
-    public void performDeleting(Integer id) {
-        Log.d(TAG, "performDeleting: click on delete contact button. contact id:" + id);
+    public void performAction(Object data) {
+        updateSjContactsList();
+        cleanSjHistory();
+    }
+
+    @Override
+    public void performDeletingContact(Integer id) {
+        Log.d(TAG, "performDeletingContact: click on delete contact button. contact id:" + id);
         List<Map<String, Object>> items = mSjContactAdapter.getItems();
         Integer position = 0;
         for (Map<String, Object> item : items) {
@@ -133,7 +113,7 @@ public class MainActivity extends PeriodicUpdatableActivity implements View.OnCl
                 mSjContactAdapter.deleteItemAtPosition(position);
                 mContactRepository.delete(number);
                 mSjContactsList.invalidateViews();
-                Log.d(TAG, "performDeleting: contact " + item + " has been deleted from sj");
+                Log.d(TAG, "performDeletingContact: contact " + item + " has been deleted from sj");
                 return;
             }
             ++position;

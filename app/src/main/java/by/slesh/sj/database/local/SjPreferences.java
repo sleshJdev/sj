@@ -15,10 +15,15 @@ public class SjPreferences {
 
     public enum Key {
         LAST_UPDATE_TIME("0"),
-        MAIN_PERIOD(Long.toString(TimeUnit.HOURS.toSeconds(1))),
-        HISTORY_CLEAN_PERIOD(Long.toString(TimeUnit.HOURS.toSeconds(1))),
+        MAIN_PERIOD(Long.toString(TimeUnit.MINUTES.toSeconds(1))),
+        HISTORY_CLEAN_PERIOD(Long.toString(TimeUnit.MINUTES.toSeconds(1))),
         IS_SHOW_SMS_IN_LIST(Boolean.TRUE.toString()),
         IS_SHOW_CALLS_IN_LIST(Boolean.TRUE.toString());
+//        LAST_UPDATE_TIME("0"),
+//        MAIN_PERIOD(Long.toString(TimeUnit.HOURS.toSeconds(1))),
+//        HISTORY_CLEAN_PERIOD(Long.toString(TimeUnit.HOURS.toSeconds(1))),
+//        IS_SHOW_SMS_IN_LIST(Boolean.TRUE.toString()),
+//        IS_SHOW_CALLS_IN_LIST(Boolean.TRUE.toString());
 
         private String defaultValue;
 

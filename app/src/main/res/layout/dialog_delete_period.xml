@@ -38,7 +38,7 @@
         android:layout_height="match_parent">
 
         <RadioButton
-            android:id="@+id/hour"
+            android:id="@+id/no_delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -53,6 +53,21 @@
             android:textSize="18sp" />
 
         <RadioButton
+            android:id="@+id/hour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/selector_grey_item_background"
+            android:button="@null"
+            android:drawableRight="@android:drawable/btn_radio"
+            android:padding="10dp"
+            android:text="Старше 1 часа"
+            android:textColor="@color/small_grey"
+            android:textSize="18sp" />
+
+        <RadioButton
             android:id="@+id/day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -63,22 +78,7 @@
             android:button="@null"
             android:drawableRight="@android:drawable/btn_radio"
             android:padding="10dp"
-            android:text="1 час"
-            android:textColor="@color/small_grey"
-            android:textSize="18sp" />
-
-        <RadioButton
-            android:id="@+id/day3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="right|center_vertical"
-            android:background="@drawable/selector_grey_item_background"
-            android:button="@null"
-            android:drawableRight="@android:drawable/btn_radio"
-            android:padding="10dp"
-            android:text="1 день"
+            android:text="Старше 1 дня"
             android:textColor="@color/small_grey"
             android:textSize="18sp" />
     </RadioGroup>

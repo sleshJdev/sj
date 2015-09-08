@@ -33,14 +33,27 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private static final Map<Integer, Period> PERIODS = new HashMap<>();
+    private static final Map<Integer, Period> MAIN_PERIOD_OPTIONS = new HashMap<>();
+    private static final Map<Integer, Period> HISTORY_CLEAN_PERIOD_OPTIONS = new HashMap<>();
 
     static {
+        MAIN_PERIOD_OPTIONS.put(R.id.hour, new Period("1 минута", (int) TimeUnit.MINUTES.toSeconds(1)));
+        MAIN_PERIOD_OPTIONS.put(R.id.day, new Period("5 минут", (int) TimeUnit.MINUTES.toSeconds(5)));
+        MAIN_PERIOD_OPTIONS.put(R.id.day3, new Period("30 минут", (int) TimeUnit.MINUTES.toSeconds(30)));
+        MAIN_PERIOD_OPTIONS.put(R.id.day7, new Period("1 час", (int) TimeUnit.HOURS.toSeconds(1)));
+    }
+
+    static {
+        HISTORY_CLEAN_PERIOD_OPTIONS.put(R.id.no_delete, new Period("Не далять", -1));
+        HISTORY_CLEAN_PERIOD_OPTIONS.put(R.id.hour, new Period("1 минута", (int) TimeUnit.MINUTES.toSeconds(1)));
+        HISTORY_CLEAN_PERIOD_OPTIONS.put(R.id.day, new Period("5 минут", (int) TimeUnit.MINUTES.toSeconds(5)));
+    }
+    /*static {
         PERIODS.put(R.id.hour, new Period("1 час", (int) TimeUnit.HOURS.toSeconds(1)));
         PERIODS.put(R.id.day, new Period("1 день", (int) TimeUnit.DAYS.toSeconds(1)));
         PERIODS.put(R.id.day3, new Period("3 дня", (int) TimeUnit.DAYS.toSeconds(3)));
         PERIODS.put(R.id.day7, new Period("7 дней", (int) TimeUnit.DAYS.toSeconds(7)));
-    }
+    }*/
 
     private AlertDialog.Builder builder;
 
@@ -79,23 +92,28 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.settings_period:
                 changePeriod(R.layout.dialog_period,
+                        MAIN_PERIOD_OPTIONS,
                         SjPreferences.Key.MAIN_PERIOD,
                         new Action() {
                             @Override
-                            public void perform(Object data) {
+                            public void performAction(Object data) {
                                 Period period = (Period) data;
-                                Toast.makeText(getApplicationContext(), "Период истории изменен на " + period.name, Toast.LENGTH_SHORT).show();
+                                SjPreferences.set(getApplicationContext(), SjPreferences.Key.MAIN_PERIOD, period.value.toString());
+                                Toast.makeText(getApplicationContext(), "Период изменен на " + period.name, Toast.LENGTH_SHORT).show();
                             }
                         }
                 );
                 break;
             case R.id.delete_history_button:
                 changePeriod(R.layout.dialog_delete_period,
+                        HISTORY_CLEAN_PERIOD_OPTIONS,
                         SjPreferences.Key.HISTORY_CLEAN_PERIOD,
                         new Action() {
                             @Override
-                            public void perform(Object data) {
-//                                cleanHistory((Period) data);
+                            public void performAction(Object data) {
+                                Period period = (Period) data;
+                                SjPreferences.set(getApplicationContext(), SjPreferences.Key.HISTORY_CLEAN_PERIOD, period.value.toString());
+                                Toast.makeText(getApplicationContext(), "Период чистки истории изменен на " + period.name, Toast.LENGTH_SHORT).show();
                             }
                         });
                 break;
@@ -108,12 +126,12 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void changePeriod(final Integer dialogId, final SjPreferences.Key changeableProperty, final Action action) {
+    private void changePeriod(final Integer dialogId, final Map<Integer, Period> options, final SjPreferences.Key changeableProperty, final Action action) {
         View dialog = getLayoutInflater().inflate(dialogId, null);
 
         Integer currentPeriod = SjPreferences.getInteger(getApplicationContext(), changeableProperty);
-        for (Integer id : PERIODS.keySet()) {
-            if (currentPeriod.equals(PERIODS.get(id).value)) {
+        for (Integer id : options.keySet()) {
+            if (currentPeriod.equals(options.get(id).value)) {
                 ((RadioButton) dialog.findViewById(id)).setChecked(true);
                 break;
             }
@@ -125,14 +143,13 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         ((RadioGroup) dialog.findViewById(R.id.period_options)).setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (PERIODS.containsKey(checkedId)) {
-                    Period period = PERIODS.get(checkedId);
-                    SjPreferences.set(getApplicationContext(), changeableProperty, period.value.toString());
-                    if (action != null) {
-                        action.perform(period);
+                if (action != null) {
+                    if (options.containsKey(checkedId)) {
+                        action.performAction(options.get(checkedId));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Вы ничего не выбрали", Toast.LENGTH_SHORT).show();
                     }
                 }
-
                 alertDialog.dismiss();
             }
         });
@@ -149,6 +166,4 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
         Toast.makeText(getApplicationContext(), "Теперь смс " + (state ? "будут" : "не будут") + " показываться", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "Изменены настройки. Показывать смс в спике: " + state);
     }
-
-
 }

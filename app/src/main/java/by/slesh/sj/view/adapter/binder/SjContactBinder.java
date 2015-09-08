@@ -16,7 +16,7 @@ public class SjContactBinder implements SimpleAdapter.ViewBinder {
     private DeleteContactListener deleteContactListener;
 
     public interface DeleteContactListener {
-        public void performDeleting(Integer id);
+        public void performDeletingContact(Integer id);
     }
 
     public SjContactBinder(DeleteContactListener deleteContactListener) {
@@ -39,7 +39,7 @@ public class SjContactBinder implements SimpleAdapter.ViewBinder {
                     @Override
                     public void onClick(View v) {
                         if (deleteContactListener != null) {
-                            deleteContactListener.performDeleting(Integer.valueOf(data.toString()));
+                            deleteContactListener.performDeletingContact(Integer.valueOf(data.toString()));
                         }
                     }
                 });

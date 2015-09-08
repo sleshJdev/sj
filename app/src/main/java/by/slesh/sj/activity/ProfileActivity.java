@@ -26,7 +26,7 @@ public class ProfileActivity extends PeriodicUpdatableActivity implements Action
         findViewById(R.id.button_settings).setOnClickListener(this);
         mSjContactActivityList = (ListView) findViewById(R.id.list_stat);
         updateActivity();
-        setAction(this);
+        setPeriodicAction(this);
     }
 
     private void updateActivity() {
@@ -42,7 +42,7 @@ public class ProfileActivity extends PeriodicUpdatableActivity implements Action
     }
 
     @Override
-    public void perform(Object data) {
+    public void performAction(Object data) {
         updateActivity();
     }
 
