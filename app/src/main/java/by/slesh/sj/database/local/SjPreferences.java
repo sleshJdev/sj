@@ -2,7 +2,6 @@ package by.slesh.sj.database.local;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import by.slesh.sj.database.core.Database;
 
@@ -33,14 +32,6 @@ public class SjPreferences {
     public static final String DEFAULT_HISTORY_CLEAN_PERIOD = "1";
     public static final Boolean DEFAULT_IS_SHOW_SMS_IN_LIST = Boolean.TRUE;
     public static final Boolean DEFAULT_IS_SHOW_CALLS_IN_LIST = Boolean.TRUE;
-
-    public static final void initialize() {
-        for (Key key : Key.values()) {
-            set(key, key.defaultValue);
-
-            Log.d("__________", key.defaultValue);
-        }
-    }
 
     public static final String get(Key key) {
         return getPreferences().getAll().get(key.name()).toString();
