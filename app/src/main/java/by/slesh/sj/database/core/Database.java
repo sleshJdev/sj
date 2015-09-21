@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package by.slesh.sj.database.core;
 
 import android.content.Context;
@@ -95,3 +96,79 @@ public class Database {
         return mConnector.getReadableDatabase();
     }
 }
+=======
+package by.slesh.sj.database.core;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.database.DatabaseErrorHandler;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+/**
+ * Created by slesh on 05.09.2015.
+ */
+public class Database extends SQLiteOpenHelper {
+    Database(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
+    }
+
+    Database(Context context, String name, SQLiteDatabase.CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
+        super(context, name, factory, version, errorHandler);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase connection) {
+        Log.d(TAG, "onCreate: creating database...");
+        DatabaseSchemaCreator.initialize(connection);
+        Log.d(TAG, "onCreate: done");
+
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d(TAG, "onUpgrade: upgrade database...");
+    }
+
+    public static final String TAG = Database.class.getCanonicalName();
+
+    public static final String NAME = "sj";
+    public static final Integer VERSION = 1;
+
+    private Context mContext;
+
+    public Database(Context context) {
+        super(context, NAME, null, VERSION);
+        this.mContext = context;
+    }
+
+    public static final void close(SQLiteDatabase connection) {
+        try {
+            if (connection != null && connection.isOpen()) {
+                connection.close();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "close: error during closing connection", e);
+        }
+    }
+
+    public static final void close(Cursor cursor) {
+        try {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "close: error during closing cursor", e);
+        }
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
+
+    public SQLiteDatabase getConnection() {
+        return getWritableDatabase();
+    }
+}
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e

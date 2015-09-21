@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -140,3 +141,147 @@
         android:layout_below="@+id/action_button"></ListView>
 
 </RelativeLayout>
+=======
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/header_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="-15dp"
+        android:background="@drawable/header_background"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp">
+
+        <LinearLayout
+            android:id="@+id/lhapp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="4dp"
+                android:contentDescription="@string/logo"
+                android:src="@drawable/mini_logo" />
+
+            <by.slesh.sj.view.view.GradientTextView
+                android:id="@+id/app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:shadowColor="@color/stroke_text"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="4"
+                android:text="@string/app_name_short"
+                android:textAllCaps="true"
+                android:textColor="@color/text_white"
+                android:textSize="22sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/settings_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dp"
+            android:gravity="center_vertical"
+            android:paddingTop="3dp"
+            android:src="@drawable/ic_fa_bars" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/main_texts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header_app"
+        android:background="@drawable/grey_item_background"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <by.slesh.sj.view.view.PFdinFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/small_grey_1"
+            android:textColor="@color/small_grey"
+            android:textSize="16sp" />
+
+        <by.slesh.sj.view.view.PFdinFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/small_grey_2"
+            android:textColor="@color/small_grey"
+            android:textSize="16sp" />
+
+        <by.slesh.sj.view.view.PFdinMediumFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/main_small_black_text"
+            android:textColor="@color/small_grey"
+            android:textSize="20sp" />
+
+        <by.slesh.sj.view.view.BlueGradientTextView
+            android:id="@+id/duration_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/default_dalay"
+            android:textColor="@color/main_dalay"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/action_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_texts"
+        android:orientation="horizontal">
+
+        <by.slesh.sj.view.view.GradientButtonView
+            android:id="@+id/add_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/selector_add_button"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="@string/button_add_contact"
+            android:textAllCaps="true"
+            android:textColor="@color/text_white"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/selected_contact_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/action_button"></ListView>
+
+</RelativeLayout>
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e

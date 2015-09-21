@@ -31,7 +31,11 @@
                 android:contentDescription="@string/logo"
                 android:src="@drawable/mini_logo" />
 
+<<<<<<< HEAD
             <TextView
+=======
+            <by.slesh.sj.view.view.GradientTextView
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                 android:id="@+id/app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +63,11 @@
             android:src="@drawable/ic_fa_bars" />
     </RelativeLayout>
 
+<<<<<<< HEAD
     <TextView
+=======
+    <by.slesh.sj.view.view.GradientButtonView
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
         android:id="@+id/button_ok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

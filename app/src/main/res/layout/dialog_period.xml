@@ -17,7 +17,11 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true">
 
+<<<<<<< HEAD
             <devapp.scalej.help.GradientTextView
+=======
+            <by.slesh.sj.view.view.GradientTextView
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"

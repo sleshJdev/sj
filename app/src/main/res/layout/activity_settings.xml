@@ -31,7 +31,11 @@
                 android:contentDescription="@string/logo"
                 android:src="@drawable/mini_logo" />
 
+<<<<<<< HEAD
             <TextView
+=======
+            <by.slesh.sj.view.view.BlueGradientTextView
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                 android:id="@+id/app_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,14 +76,22 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
+<<<<<<< HEAD
                 <TextView
+=======
+                <by.slesh.sj.view.view.PFdinFont
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Период"
                     android:textColor="@color/small_grey"
                     android:textSize="18sp" />
 
+<<<<<<< HEAD
                 <TextView
+=======
+                <by.slesh.sj.view.view.PFdinFont
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                     android:id="@+id/period_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -107,14 +119,22 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
+<<<<<<< HEAD
                 <TextView
+=======
+                <by.slesh.sj.view.view.PFdinFont
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Звонки входящие"
                     android:textColor="@color/small_grey"
                     android:textSize="18sp" />
 
+<<<<<<< HEAD
                 <TextView
+=======
+                <by.slesh.sj.view.view.PFdinFont
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Отображать звонки в списке"
@@ -123,7 +143,11 @@
             </LinearLayout>
 
             <CheckBox
+<<<<<<< HEAD
                 android:id="@+id/checkbox_call"
+=======
+                android:id="@+id/is_show_call_checkbox"
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -148,14 +172,22 @@
                 android:gravity="center_vertical"
                 android:orientation="vertical">
 
+<<<<<<< HEAD
                 <TextView
+=======
+                <by.slesh.sj.view.view.PFdinFont
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Смс"
                     android:textColor="@color/small_grey"
                     android:textSize="18sp" />
 
+<<<<<<< HEAD
                 <TextView
+=======
+                <by.slesh.sj.view.view.PFdinFont
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Отображать смс в списке"
@@ -164,7 +196,11 @@
             </LinearLayout>
 
             <CheckBox
+<<<<<<< HEAD
                 android:id="@+id/checkbox_sms"
+=======
+                android:id="@+id/is_show_sms_checkbox"
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -179,10 +215,17 @@
             android:padding="10dp">
 
             <Button
+<<<<<<< HEAD
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
                 android:onClick="deleteHistory"
+=======
+                android:id="@+id/delete_history_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
                 android:text="@string/delete_history"
                 android:textColor="@color/remove_contact_gradient_1" />
         </LinearLayout>

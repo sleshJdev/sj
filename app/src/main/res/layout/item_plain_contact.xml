@@ -27,7 +27,11 @@
         android:gravity="center_vertical"
         android:orientation="vertical">
 
+<<<<<<< HEAD
         <TextView
+=======
+        <by.slesh.sj.view.view.PFdinFont
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
             android:id="@+id/plain_contact_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +39,11 @@
             android:textColor="@color/small_grey"
             android:textSize="18sp" />
 
+<<<<<<< HEAD
         <TextView
+=======
+        <by.slesh.sj.view.view.PFdinFont
+>>>>>>> 49d28eb0877fb4d02ca30ad13e6abeecdf62e99e
             android:id="@+id/plain_contact_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
